@@ -1,0 +1,195 @@
+﻿<!DOCTYPE html>
+<html>
+<head>
+    <title>2D 陀螺旋转模拟（修复版）</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            justify-content: center;
+            min-height: 100vh;
+            margin: 0;
+            background: #f0f0f0;
+        }
+
+        .control-panel {
+            background: white;
+            padding: 20px;
+            border-radius: 10px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin: 10px 0;
+        }
+
+        label {
+            display: inline-block;
+            width: 150px;
+            font-weight: bold;
+        }
+
+        input {
+            width: 100px;
+            padding: 5px;
+            border: 1px solid #ccc;
+            border-radius: 4px;
+        }
+
+        button {
+            margin-top: 10px;
+            padding: 10px 20px;
+            background: #007bff;
+            color: white;
+            border: none;
+            border-radius: 4px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background: #0056b3;
+            }
+
+        .moving-image-container {
+            width: 150px;
+            height: 150px;
+            display: flex;
+            align-items: center;
+            justify-content: center;
+        }
+
+        .moving-image {
+            width: 100%;
+            height: 100%;
+            object-fit: contain;
+            /* 移除过渡效果 */
+        }
+    </style>
+</head>
+<body>
+    <div class="control-panel">
+        <div class="input-group">
+            <label>质量 m (kg):</label>
+            <input type="number" id="m" value="0.1" step="0.01">
+        </div>
+        <div class="input-group">
+            <label>摩擦因数 μ:</label>
+            <input type="number" id="u" value="0.005" step="0.001"> <!-- 更合理的默认值 -->
+        </div>
+        <div class="input-group">
+            <label>空气阻力 k (kg·m²/s²):</label>
+            <input type="number" id="k" value="0.0001" step="0.0001"> <!-- 调整默认值 -->
+        </div>
+        <div class="input-group">
+            <label>初始转速 ω (rad/s):</label>
+            <input type="number" id="w" value="30" step="1"> <!-- 提高初始转速 -->
+        </div>
+        <div class="input-group">
+            <label>质点距离 l (m):</label>
+            <input type="number" id="l" value="0.05" step="0.01">
+        </div>
+        <button onclick="startRotation()">开始旋转</button>
+    </div>
+
+    <div class="moving-image-container">
+        <img src="rotate.png" alt="陀螺图片" class="moving-image" id="top">
+    </div>
+
+    <script>
+        // 全局变量
+        let m, mu, k, I, l;
+        let rotation = 0;
+        let angularVelocity = 0;
+        let lastTime = 0;
+        let animationFrameId = 0;
+        const topElement = document.getElementById('top');
+
+        // 物理计算优化
+        function calculateMomentOfInertia(l) {
+            return 3 * m * l ** 2;
+        }
+
+        function updatePhysics(deltaTime) {
+            // 精确计算力矩
+            const g = 9.8;
+            const normalForce = m * g;
+
+            // 改进的摩擦力计算（考虑动态摩擦）
+            const frictionTorque = mu * normalForce * l * Math.tanh(angularVelocity * 0.1);
+
+            // 改进的空气阻力模型
+            const airResistanceTorque = k * angularVelocity * Math.abs(angularVelocity);
+
+            const totalTorque = -(frictionTorque + airResistanceTorque);
+            const angularAcceleration = totalTorque / I;
+
+            // 使用改进的积分方法（半隐式欧拉法）
+            angularVelocity += angularAcceleration * deltaTime;
+
+            // 严格限制角速度为非负
+            angularVelocity = Math.max(angularVelocity, 0);
+        }
+
+        // 优化的动画循环
+        function animate(timestamp) {
+            if (!lastTime) lastTime = timestamp;
+
+            // 精确时间差计算（毫秒转秒）
+            const deltaTime = (timestamp - lastTime) / 1000;
+
+            // 物理状态更新
+            updatePhysics(deltaTime);
+
+            // 角度累积（避免模运算导致的跳变）
+            rotation += angularVelocity * deltaTime * (180 / Math.PI);
+
+            // 优化旋转应用方式
+            const currentRotation = rotation % 360;
+            topElement.style.transform = `rotate(${currentRotation}deg)`;
+
+            // 动态帧率控制
+            if (angularVelocity > 0.1) {
+                animationFrameId = requestAnimationFrame(animate);
+            } else {
+                angularVelocity = 0;
+                rotation = currentRotation; // 保持最终角度
+                console.log('陀螺完全停止');
+            }
+
+            lastTime = timestamp;
+        }
+
+        function startRotation() {
+            // 完全停止当前动画
+            cancelAnimationFrame(animationFrameId);
+
+            // 参数初始化
+            m = parseFloat(document.getElementById('m').value);
+            mu = parseFloat(document.getElementById('u').value);
+            k = parseFloat(document.getElementById('k').value);
+            angularVelocity = parseFloat(document.getElementById('w').value);
+            l = parseFloat(document.getElementById('l').value);
+
+            // 参数校验
+            if ([m, mu, k, angularVelocity, l].some(isNaN)) {
+                alert("请输入有效的数值参数！");
+                return;
+            }
+
+            // 物理量计算
+            I = calculateMomentOfInertia(l);
+
+            // 状态重置
+            rotation = 0;
+            lastTime = 0;
+            topElement.style.transform = 'rotate(0deg)';
+
+            // 启动动画
+            animationFrameId = requestAnimationFrame(animate);
+        }
+    </script>
+</body>
+</html>

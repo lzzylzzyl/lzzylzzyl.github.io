@@ -1,0 +1,7 @@
+cd C:\Users\zhang\Desktop\homework1
+python app.py
+http://localhost:8000/static/comment.html
+
+python -m http.server 8000
+http://localhost:8000/comment.html
+http://localhost:8000/comment.html

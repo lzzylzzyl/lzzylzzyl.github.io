@@ -1,0 +1,258 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Wiki 主页</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+            margin: 0;
+            padding: 0;
+            background-color: #1a1a1a; /* 深色背景 */
+            color: #fff;
+            line-height: 1.6;
+            overflow: hidden; /* 防止页面滚动 */
+        }
+
+        /* 头部样式 */
+        header {
+            background-color: rgba(74, 144, 226, 0.8); /* 半透明背景 */
+            color: white;
+            padding: 40px 0;
+            text-align: center;
+            box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+            header h1 {
+                margin: 0;
+                font-size: 2.5rem;
+                font-weight: bold;
+            }
+
+            header p {
+                margin: 10px 0 0;
+                font-size: 1.2rem;
+                opacity: 0.9;
+            }
+
+        /* 导航栏样式 */
+        nav {
+            background-color: rgba(53, 122, 189, 0.8); /* 半透明背景 */
+            padding: 10px 0;
+            text-align: center;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+            nav a {
+                color: white;
+                text-decoration: none;
+                margin: 0 15px;
+                font-size: 1.1rem;
+                transition: color 0.3s ease;
+            }
+
+                nav a:hover {
+                    color: #ffdd57;
+                }
+
+        /* 主体内容样式 */
+        .container {
+            max-width: 1200px;
+            margin: 40px auto;
+            padding: 20px;
+            background-color: rgba(255, 255, 255, 0.1); /* 半透明背景 */
+            border-radius: 8px;
+            box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+        .main-content {
+            margin-top: 20px;
+        }
+
+            .main-content h2 {
+                color: #4a90e2;
+                font-size: 2rem;
+                margin-bottom: 20px;
+                border-bottom: 2px solid #4a90e2;
+                padding-bottom: 10px;
+            }
+
+            .main-content ul {
+                list-style-type: none;
+                padding: 0;
+            }
+
+                .main-content ul li {
+                    background-color: rgba(249, 249, 249, 0.1); /* 半透明背景 */
+                    margin: 10px 0;
+                    padding: 15px;
+                    border-radius: 5px;
+                    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+                    transition: transform 0.2s ease, box-shadow 0.2s ease;
+                }
+
+                    .main-content ul li:hover {
+                        transform: translateY(-2px);
+                        box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+                    }
+
+                    .main-content ul li a {
+                        color: #fff;
+                        text-decoration: none;
+                        font-size: 1.1rem;
+                        font-weight: 500;
+                    }
+
+                        .main-content ul li a:hover {
+                            color: #4a90e2;
+                        }
+
+        /* 页脚样式 */
+        footer {
+            background-color: rgba(51, 51, 51, 0.8); /* 半透明背景 */
+            color: white;
+            text-align: center;
+            padding: 20px 0;
+            margin-top: 40px;
+            box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+            position: relative;
+            z-index: 1;
+        }
+
+            footer p {
+                margin: 0;
+                font-size: 0.9rem;
+                opacity: 0.8;
+            }
+
+        /* 粒子效果容器 */
+        #particles-js {
+            position: absolute;
+            top: 0;
+            left: 0;
+            width: 100%;
+            height: 100%;
+            z-index: 0; /* 确保粒子在内容下方 */
+        }
+
+        /* 鼠标点击特效 */
+        .click-effect {
+            position: absolute;
+            width: 20px;
+            height: 20px;
+            background-color: rgba(255, 255, 255, 0.7);
+            border-radius: 50%;
+            pointer-events: none;
+            transform: translate(-50%, -50%);
+            animation: clickAnimation 0.5s ease-out;
+        }
+
+        @keyframes clickAnimation {
+            0% {
+                transform: scale(0);
+                opacity: 1;
+            }
+
+            100% {
+                transform: scale(3);
+                opacity: 0;
+            }
+        }
+    </style>
+</head>
+<body>
+
+    <!-- 粒子效果容器 -->
+    <div id="particles-js"></div>
+
+    <header>
+        <h1>欢迎来到 Wiki 主页</h1>
+        <p>探索知识的海洋，发现无限可能</p>
+    </header>
+
+    <nav>
+        <a href="#">首页</a>
+        <a href="#">关于我们</a>
+        <a href="#">分类</a>
+        <a href="#">帮助</a>
+    </nav>
+
+    <div class="container">
+        <div class="main-content">
+            <h2>最新文章</h2>
+            <ul>
+                <li><a href="#">文章标题 1：如何学习编程</a></li>
+                <li><a href="#">文章标题 2：人工智能的未来</a></li>
+                <li><a href="#">文章标题 3：Web 开发入门指南</a></li>
+            </ul>
+
+            <h2>热门分类</h2>
+            <ul>
+                <li><a href="#">科技</a></li>
+                <li><a href="#">历史</a></li>
+                <li><a href="#">艺术与文化</a></li>
+            </ul>
+        </div>
+    </div>
+
+    <footer>
+        <p>&copy; 2023 Wiki 主页. 保留所有权利.</p>
+    </footer>
+
+    <!-- 引入 particles.js 库 -->
+    <script src="https://cdn.jsdelivr.net/particles.js/2.0.0/particles.min.js"></script>
+    <script>
+        // 直接通过 JavaScript 配置粒子效果
+        particlesJS('particles-js', {
+            particles: {
+                number: { value: 80 }, // 粒子数量
+                color: { value: "#ffffff" }, // 粒子颜色
+                shape: { type: "circle" }, // 粒子形状
+                opacity: { value: 0.5 }, // 粒子透明度
+                size: { value: 3 }, // 粒子大小
+                line_linked: {
+                    enable: true, // 是否启用连线
+                    distance: 150, // 连线距离
+                    color: "#ffffff", // 连线颜色
+                    opacity: 0.4, // 连线透明度
+                    width: 1 // 连线宽度
+                },
+                move: {
+                    enable: true, // 是否启用运动
+                    speed: 6, // 运动速度
+                    direction: "none", // 运动方向
+                    out_mode: "out" // 粒子超出画布时的行为
+                }
+            },
+            interactivity: {
+                detect_on: "canvas", // 交互检测区域
+                events: {
+                    onhover: { enable: true, mode: "repulse" }, // 悬停效果
+                    onclick: { enable: true, mode: "push" } // 点击效果
+                }
+            }
+        });
+        // 鼠标点击特效
+        document.addEventListener('click', function (event) {
+            const clickEffect = document.createElement('div');
+            clickEffect.className = 'click-effect';
+            clickEffect.style.left = `${event.clientX}px`;
+            clickEffect.style.top = `${event.clientY}px`;
+            document.body.appendChild(clickEffect);
+
+            // 动画结束后移除元素
+            clickEffect.addEventListener('animationend', () => {
+                clickEffect.remove();
+            });
+        });
+    </script>
+</body>
+</html>

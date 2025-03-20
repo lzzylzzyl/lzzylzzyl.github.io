@@ -1,0 +1,170 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>函数绘图器</title>
+    <link rel="stylesheet" href="styles.css"> <!-- 引入外部 CSS 文件 -->
+    <style>
+        /* 函数输入表单样式 */
+        #function-form {
+            margin-bottom: 20px;
+        }
+        .function-input-group {
+            margin-bottom: 15px;
+        }
+            .function-input-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: #333;
+            }
+            .function-input-group input {
+                width: 100%;
+                padding: 10px;
+                font-size: 1em;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+        /* 按钮样式 */
+        button {
+            padding: 10px 20px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            margin-right: 10px;
+        }
+            button:hover {
+                background-color: #2980b9;
+            }
+        /* 绘图区域样式 */
+        #plot {
+            width: 100%;
+            height: 500px;
+            margin-top: 20px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+        }
+    </style>
+    <script src="https://cdn.plot.ly/plotly-latest.min.js"></script> <!-- 引入 Plotly.js 用于绘图 -->
+
+</head>
+<body>
+    <!-- 粒子效果容器 -->
+    <div id="particles-js"></div>
+
+    <!-- 页面内容 -->
+    <div class="content-wrapper">
+        <header>
+            <h1>函数绘图器</h1>
+            <p>输入函数表达式，绘制函数图像</p>
+        </header>
+
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="about.html">关于我们</a>
+            <a href="categories.html">分类</a>
+            <a href="help.html">帮助</a>
+        </nav>
+
+        <div class="container">
+            <div class="main-content">
+                <h2>函数绘图</h2>
+                <form id="function-form">
+                    <div id="function-inputs">
+                        <div class="function-input-group">
+                            <label for="function-input-1">函数表达式（例如：x^2 + 2*x + 1）：</label>
+                            <input type="text" id="function-input-1" placeholder="例如：x^2 + 2*x + 1" required>
+                        </div>
+                    </div>
+                    <button type="button" id="add-function">添加函数</button>
+                    <button type="submit">绘制</button>
+                </form>
+                <div id="plot"></div> <!-- 用于显示函数图像的容器 -->
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 Wiki 主页. 保留所有权利.</p>
+        </footer>
+    </div>
+
+    <!-- 引入 particles.js 库 -->
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="scripts.js"></script> <!-- 引入外部 JS 文件 -->
+    <script>
+        document.addEventListener('DOMContentLoaded', function () {
+            let inputCount = 1;
+
+            // 添加函数输入框
+            document.getElementById('add-function').addEventListener('click', function () {
+                inputCount++;
+                const inputGroup = document.createElement('div');
+                inputGroup.className = 'function-input-group';
+                inputGroup.innerHTML = `
+            <label for="function-input-${inputCount}">函数表达式（例如：x^2 + 2*x + 1）：</label>
+            <input type="text" id="function-input-${inputCount}" placeholder="例如：x^2 + 2*x + 1" required>
+        `;
+                document.getElementById('function-inputs').appendChild(inputGroup);
+            });
+
+            // 处理表单提交
+            document.getElementById('function-form').addEventListener('submit', function (event) {
+                event.preventDefault(); // 阻止表单提交
+
+                const xValues = [];
+                const traces = [];
+
+                // 生成 x 值范围
+                for (let x = -10; x <= 10; x += 0.1) {
+                    xValues.push(x);
+                }
+
+                // 获取所有函数输入框的值
+                const inputs = document.querySelectorAll('#function-inputs input');
+                inputs.forEach((input, index) => {
+                    const functionInput = input.value;
+                    const yValues = [];
+
+                    try {
+                        // 替换 '^' 为 '**' 以便 JavaScript 计算次方
+                        for (let x of xValues) {
+                            const expression = functionInput.replace(/x/g, x).replace(/\^/g, '**');
+                            yValues.push(eval(expression)); // 计算 y 值
+                        }
+
+                        // 创建 Plotly 的 trace
+                        traces.push({
+                            x: xValues,
+                            y: yValues,
+                            type: 'scatter',
+                            mode: 'lines',
+                            name: `f${index + 1}(x)`
+                        });
+                    } catch (e) {
+                        console.error("表达式错误:", e);
+                        alert(`函数 ${index + 1} 的表达式无效，请检查输入！`);
+                        return;
+                    }
+                });
+
+                // 使用 Plotly 绘制函数图像
+                const layout = {
+                    title: '函数图像',
+                    xaxis: { title: 'x', range: [-10, 10] }, // 初始 x 轴范围
+                    yaxis: { title: 'f(x)', range: [-10, 10] }, // 初始 y 轴范围
+                    showlegend: true // 显示图例
+                };
+
+                Plotly.newPlot('plot', traces, layout);
+            });
+        });
+
+    </script>
+</body>
+</html>

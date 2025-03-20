@@ -1,0 +1,360 @@
+﻿<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>高级复数运算器</title>
+    <style>
+        /* 全局样式 */
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 0;
+        }
+
+        /* 内容容器样式 */
+        .content-wrapper {
+            max-width: 800px;
+            margin: 0 auto;
+            padding: 20px;
+            background-color: #fff;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+            border-radius: 10px;
+            margin-top: 20px;
+        }
+
+        /* 标题样式 */
+        header h1 {
+            text-align: center;
+            color: #3498db;
+            margin-bottom: 10px;
+        }
+
+        header p {
+            text-align: center;
+            color: #666;
+            font-size: 1.1em;
+        }
+
+        /* 输入表单样式 */
+        #complex-form {
+            margin-bottom: 20px;
+        }
+
+        .input-group {
+            margin-bottom: 15px;
+        }
+
+            .input-group label {
+                display: block;
+                margin-bottom: 5px;
+                font-weight: bold;
+                color: #333;
+            }
+
+            .input-group input {
+                width: 100%;
+                padding: 10px;
+                font-size: 1em;
+                border: 1px solid #ccc;
+                border-radius: 5px;
+                box-sizing: border-box;
+            }
+
+        /* 运算选择样式 */
+        #operation {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            margin-bottom: 15px;
+            background-color: #fff;
+        }
+
+        /* 按钮样式 */
+        button {
+            width: 100%;
+            padding: 10px;
+            font-size: 1em;
+            color: #fff;
+            background-color: #3498db;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+        }
+
+            button:hover {
+                background-color: #2980b9;
+            }
+
+        /* 结果框样式 */
+        .result-box {
+            padding: 15px;
+            background-color: #f9f9f9;
+            border: 1px solid #ddd;
+            border-radius: 5px;
+            margin-top: 20px;
+        }
+
+            .result-box div {
+                margin-bottom: 10px;
+                font-size: 1.1em;
+                color: #333;
+            }
+
+        /* 页脚样式 */
+        footer {
+            text-align: center;
+            margin-top: 20px;
+            color: #666;
+            font-size: 0.9em;
+        }
+    </style>
+</head>
+<body>
+    <div class="content-wrapper">
+        <header>
+            <h1>高级复数运算器</h1>
+            <p>支持复数次方、实数次方等高级运算</p>
+        </header>
+
+        <div class="container">
+            <div class="main-content">
+                <h2>输入参数</h2>
+                <form id="complex-form">
+                    <!-- 复数1输入 -->
+                    <div class="input-group">
+                        <label for="real1">复数 z₁ 实部:</label>
+                        <input type="number" id="real1" step="any" required>
+                    </div>
+                    <div class="input-group">
+                        <label for="imag1">复数 z₁ 虚部:</label>
+                        <input type="number" id="imag1" step="any" required>
+                    </div>
+
+                    <!-- 复数2输入（动态变化） -->
+                    <div class="input-group" id="z2-inputs">
+                        <label for="real2">复数 z₂ 实部:</label>
+                        <input type="number" id="real2" step="any" required>
+                    </div>
+                    <div class="input-group" id="z2-imag-inputs">
+                        <label for="imag2">复数 z₂ 虚部:</label>
+                        <input type="number" id="imag2" step="any" required>
+                    </div>
+
+                    <!-- 运算选择 -->
+                    <label for="operation">选择运算:</label>
+                    <select id="operation" required>
+                        <option value="add">加法 (+)</option>
+                        <option value="subtract">减法 (-)</option>
+                        <option value="multiply">乘法 (×)</option>
+                        <option value="divide">除法 (÷)</option>
+                        <option value="modulus">模运算 (|z|)</option>
+                        <option value="power_complex">复数次方 (z₁^z₂)</option>
+                        <option value="power_real">实数次方 (z₁^a)</option>
+                    </select>
+
+                    <button type="submit">计算</button>
+                </form>
+
+                <h2>计算结果</h2>
+                <div id="result" class="result-box"></div>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 高级复数运算器. 保留所有权利.</p>
+        </footer>
+    </div>
+
+    <script>
+        /**
+         * 初始化页面交互
+         */
+        document.addEventListener('DOMContentLoaded', () => {
+            // 动态显示/隐藏输入框
+            const operationSelect = document.getElementById('operation');
+            const imag2Input = document.getElementById('z2-imag-inputs');
+
+            operationSelect.addEventListener('change', () => {
+                if (operationSelect.value === 'power_real') {
+                    imag2Input.style.display = 'none';
+                    document.querySelector('label[for="real2"]').textContent = '指数 a:';
+                } else {
+                    imag2Input.style.display = 'block';
+                    document.querySelector('label[for="real2"]').textContent = '复数 z₂ 实部:';
+                }
+            });
+        });
+
+        /**
+         * 复数运算表单提交处理
+         */
+        document.getElementById('complex-form').addEventListener('submit', function (e) {
+            e.preventDefault();
+
+            try {
+                // 获取输入值
+                const z1 = {
+                    real: parseFloat(document.getElementById('real1').value),
+                    imag: parseFloat(document.getElementById('imag1').value)
+                };
+                const z2 = {
+                    real: parseFloat(document.getElementById('real2').value),
+                    imag: parseFloat(document.getElementById('imag2').value)
+                };
+                const operation = document.getElementById('operation').value;
+
+                // 执行运算
+                let result;
+                switch (operation) {
+                    case 'add': result = add(z1, z2); break;
+                    case 'subtract': result = subtract(z1, z2); break;
+                    case 'multiply': result = multiply(z1, z2); break;
+                    case 'divide': result = divide(z1, z2); break;
+                    case 'modulus': result = { real: modulus(z1), imag: 0 }; break;
+                    case 'power_complex': result = complexPower(z1, z2); break;
+                    case 'power_real': result = realPower(z1, z2.real); break;
+                    default: throw new Error('未知的运算类型');
+                }
+
+                // 显示结果
+                document.getElementById('result').innerHTML = `
+                    <div>代数形式: ${formatComplex(result)}</div>
+                    <div>极坐标形式: ${toPolar(result)}</div>
+                `;
+            } catch (error) {
+                document.getElementById('result').textContent = `错误: ${error.message}`;
+            }
+        });
+
+        /**
+         * 复数自然对数计算
+         * @param {Object} z - 复数对象 {real, imag}
+         * @returns {Object} 计算结果复数
+         */
+        function complexLn(z) {
+            if (z.real === 0 && z.imag === 0) throw new Error("不能计算0的复对数");
+            const mod = modulus(z);
+            const arg = Math.atan2(z.imag, z.real);
+            return { real: Math.log(mod), imag: arg };
+        }
+
+        /**
+         * 复数指数运算
+         * @param {Object} z - 复数对象 {real, imag}
+         * @returns {Object} 计算结果复数
+         */
+        function complexExp(z) {
+            const er = Math.exp(z.real);
+            return {
+                real: er * Math.cos(z.imag),
+                imag: er * Math.sin(z.imag)
+            };
+        }
+
+        /**
+         * 复数次方运算 (z₁^z₂)
+         * @param {Object} z1 - 底数复数
+         * @param {Object} z2 - 指数复数
+         * @returns {Object} 计算结果复数
+         */
+        function complexPower(z1, z2) {
+            const lnZ1 = complexLn(z1);
+            const exponent = multiply(z2, lnZ1);
+            return complexExp(exponent);
+        }
+
+        /**
+         * 实数次方运算 (z₁^a)
+         * @param {Object} z - 底数复数
+         * @param {number} a - 实数指数
+         * @returns {Object} 计算结果复数
+         */
+        function realPower(z, a) {
+            return complexPower(z, { real: a, imag: 0 });
+        }
+
+        /**
+         * 计算复数的模（绝对值）
+         * @param {Object} z - 复数对象 {real, imag}
+         * @returns {number} 复数的模
+         */
+        function modulus(z) {
+            return Math.sqrt(z.real * z.real + z.imag * z.imag);
+        }
+
+        /**
+         * 将复数转换为极坐标形式
+         * @param {Object} z - 复数对象 {real, imag}
+         * @returns {string} 极坐标表示
+         */
+        function toPolar(z) {
+            const r = modulus(z);
+            const theta = Math.atan2(z.imag, z.real) * 180 / Math.PI;
+            return `${r.toFixed(3)} ∠ ${theta.toFixed(2)}°`;
+        }
+
+        /**
+         * 复数加法
+         * @param {Object} z1 - 复数对象
+         * @param {Object} z2 - 复数对象
+         * @returns {Object} 计算结果复数
+         */
+        function add(z1, z2) {
+            return { real: z1.real + z2.real, imag: z1.imag + z2.imag };
+        }
+
+        /**
+         * 复数减法
+         * @param {Object} z1 - 复数对象
+         * @param {Object} z2 - 复数对象
+         * @returns {Object} 计算结果复数
+         */
+        function subtract(z1, z2) {
+            return { real: z1.real - z2.real, imag: z1.imag - z2.imag };
+        }
+
+        /**
+         * 复数乘法
+         * @param {Object} z1 - 复数对象
+         * @param {Object} z2 - 复数对象
+         * @returns {Object} 计算结果复数
+         */
+        function multiply(z1, z2) {
+            return {
+                real: z1.real * z2.real - z1.imag * z2.imag,
+                imag: z1.real * z2.imag + z1.imag * z2.real
+            };
+        }
+
+        /**
+         * 复数除法
+         * @param {Object} z1 - 复数对象
+         * @param {Object} z2 - 复数对象
+         * @returns {Object} 计算结果复数
+         */
+        function divide(z1, z2) {
+            const denominator = z2.real * z2.real + z2.imag * z2.imag;
+            if (denominator === 0) throw new Error("除数不能为0");
+            return {
+                real: (z1.real * z2.real + z1.imag * z2.imag) / denominator,
+                imag: (z1.imag * z2.real - z1.real * z2.imag) / denominator
+            };
+        }
+
+        /**
+         * 格式化复数显示
+         * @param {Object} z - 复数对象 {real, imag}
+         * @returns {string} 复数格式化字符串
+         */
+        function formatComplex(z) {
+            if (z.imag === 0) return z.real.toString();
+            if (z.real === 0) return `${z.imag}i`;
+            return `${z.real} + ${z.imag}i`;
+        }
+    </script>
+</body>
+</html>

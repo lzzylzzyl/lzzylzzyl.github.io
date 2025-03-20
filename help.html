@@ -1,0 +1,136 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>帮助 - Wiki 主页</title>
+    <link rel="stylesheet" href="styles.css"> <!-- 共用样式 -->
+</head>
+<body>
+    <!-- 设置面板 -->
+    <div id="settings-panel">
+        <h4>显示设置</h4>
+        <label for="bg-color">背景颜色：</label>
+        <input type="color" id="bg-color" value="#1a1a1a">
+
+        <label for="font-style">字体风格：</label>
+        <select id="font-style">
+            <option value="Segoe UI, sans-serif">默认</option>
+            <option value="Arial, sans-serif">Arial</option>
+            <option value="Georgia, serif">Georgia</option>
+            <option value="Courier New, monospace">Courier New</option>
+        </select>
+    </div>
+
+    <div id="playlist" style="display:none;">
+        <!-- 默认音乐 -->
+        <audio src="musics/1.mp3"></audio>
+        <!-- 播放列表 -->
+        <audio src="musics/2.mp3"></audio>
+        <audio src="musics/3.mp3"></audio>
+        <audio src="musics/4.mp3"></audio>
+    </div>
+    <!-- 音乐播放器 -->
+    <div id="music-player" draggable="true">
+        <h3>音乐播放器 ♫</h3>
+        <audio id="bg-music" loop>
+            <source src="default.mp3" type="audio/mpeg">
+        </audio>
+        <div class="music-controls">
+            <button class="music-btn" onclick="togglePlay()">播放/暂停</button>
+            <button class="music-btn" onclick="changeTrack()">切换音乐</button>
+        </div>
+        <div id="playlist" style="display:none;">
+            <audio src="music1.mp3"></audio>
+            <audio src="music2.mp3"></audio>
+            <audio src="music3.mp3"></audio>
+        </div>
+    </div>
+
+    <!-- 左侧导航栏 -->
+    <nav class="left-nav">
+        <h3>分类导航</h3>
+        <a href="#music" class="nav-link">音乐欣赏</a>
+        <a href="#tech" class="nav-link">科技前沿</a>
+        <a href="#literature" class="nav-link">文学天地</a>
+        <a href="#art" class="nav-link">艺术长廊</a>
+        <a href="#history" class="nav-link">历史回眸</a>
+        <a href="#science" class="nav-link">科学探索</a>
+    </nav>
+
+    <!-- 右侧导航栏 -->
+    <nav class="right-nav">
+        <h3>功能导航</h3>
+        <div class="search-box">
+            <input type="text" placeholder="搜索内容..." style="width: 100%; padding: 8px;">
+        </div>
+        <div class="hot-tags">
+            <h4>热门标签</h4>
+        </div>
+        <div class="recent-posts">
+            <h4>最新动态</h4>
+        </div>
+        <div class="external-links">
+            <h4>友情链接</h4>
+        </div>
+    </nav>
+    <div id="particles-js"></div>
+
+    <div class="content-wrapper">
+        <header>
+            <h1>帮助</h1>
+            <p>我们在这里为你提供支持</p>
+        </header>
+
+        <nav>
+            <a href="index.html">首页</a>
+            <a href="about.html">关于我们</a>
+            <a href="categories.html">分类</a>
+            <a href="help.html">帮助</a>
+        </nav>
+
+        <div class="container">
+            <div class="main-content">
+                <h2>常见问题</h2>
+                <ul>
+                    <li>
+                        <strong>如何注册账号？</strong>
+                        <p>目前 Wiki 主页无需注册即可浏览内容。未来我们将推出注册功能，敬请期待！</p>
+                    </li>
+                    <li>
+                        <strong>如何提交文章？</strong>
+                        <p>请通过邮箱 <a href="mailto:submit@wikihome.com">submit@wikihome.com</a> 联系我们，提交你的文章。</p>
+                    </li>
+                    <li>
+                        <strong>如何联系客服？</strong>
+                        <p>你可以通过 <a href="mailto:support@wikihome.com">support@wikihome.com</a> 联系我们的客服团队。</p>
+                    </li>
+                </ul>
+
+                <h2>联系我们</h2>
+                <p>
+                    如果你有任何问题或建议，请随时通过以下方式联系我们：
+                </p>
+                <ul>
+                    <li>邮箱：<a href="mailto:support@wikihome.com">support@wikihome.com</a></li>
+                    <li>电话：+86 123 4567 890</li>
+                    <li>地址：北京市海淀区 Wiki 大厦</li>
+                </ul>
+
+                <h2>讨论区</h2>
+                <ul>
+                    <li>邮箱：<a href="file:///C:/Users/zhang/Desktop/homework1/static/comment.html">评论区：Link</a></li>
+
+                </ul>
+            </div>
+        </div>
+
+        <footer>
+            <p>&copy; 2023 Wiki 主页. 保留所有权利.</p>
+        </footer>
+    </div>
+
+    <script src="https://cdn.jsdelivr.net/npm/particles.js@2.0.0/particles.min.js"></script>
+    <script src="scripts.js"></script> <!-- 共用脚本 -->
+</body>
+</html>

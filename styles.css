@@ -1,0 +1,247 @@
+body {
+    font-family: 'Segoe UI', Tahoma, Geneva, Verdana, sans-serif;
+    margin: 0;
+
+    background-color: #1a1a1a;
+    color: #fff;
+    line-height: 1.6;
+    overflow: auto;
+}
+
+/* 头部样式 */
+header {
+    background-color: rgba(74, 144, 226, 0.8);
+    color: white;
+    padding: 40px 0;
+    text-align: center;
+    box-shadow: 0 4px 6px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+    header h1 {
+        margin: 0;
+        font-size: 2.5rem;
+        font-weight: bold;
+    }
+
+    header p {
+        margin: 10px 0 0;
+        font-size: 1.2rem;
+        opacity: 0.9;
+    }
+
+/* 导航栏样式 */
+nav {
+    background-color: rgba(53, 122, 189, 0.8);
+    padding: 10px 0;
+    text-align: center;
+    box-shadow: 0 2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+    nav a {
+        color: white;
+        text-decoration: none;
+        margin: 0 15px;
+        font-size: 1.1rem;
+        transition: color 0.3s ease;
+    }
+
+        nav a:hover {
+            color: #ffdd57;
+        }
+
+/* 主体内容样式 */
+.container {
+    max-width: 800px;
+    margin: 60px auto;
+    padding: 20px;
+    background-color: rgba(255, 255, 255, 0.1);
+    border-radius: 8px;
+    box-shadow: 0 4px 10px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+.main-content {
+    margin-top: 20px;
+}
+
+    .main-content h2 {
+        color: #4a90e2;
+        font-size: 2rem;
+        margin-bottom: 20px;
+        border-bottom: 2px solid #4a90e2;
+        padding-bottom: 10px;
+    }
+
+    .main-content ul {
+        list-style-type: none;
+        padding: 0;
+    }
+
+        .main-content ul li {
+            background-color: rgba(249, 249, 249, 0.1);
+            margin: 10px 0;
+            padding: 15px;
+            border-radius: 5px;
+            box-shadow: 0 2px 4px rgba(0, 0, 0, 0.05);
+            transition: transform 0.2s ease, box-shadow 0.2s ease;
+        }
+
+            .main-content ul li:hover {
+                transform: translateY(-2px);
+                box-shadow: 0 4px 8px rgba(0, 0, 0, 0.1);
+            }
+
+            .main-content ul li a {
+                color: #fff;
+                text-decoration: none;
+                font-size: 1.1rem;
+                font-weight: 500;
+            }
+
+                .main-content ul li a:hover {
+                    color: #4a90e2;
+                }
+
+/* 页脚样式 */
+footer {
+    background-color: rgba(51, 51, 51, 0.8);
+    color: white;
+    text-align: center;
+    padding: 20px 0;
+    margin-top: 40px;
+    box-shadow: 0 -2px 4px rgba(0, 0, 0, 0.1);
+    position: relative;
+    z-index: 1;
+}
+
+    footer p {
+        margin: 0;
+        font-size: 0.9rem;
+        opacity: 0.8;
+    }
+
+/* 粒子效果容器 */
+#particles-js {
+    position: fixed;
+    top: 0;
+    left: 0;
+    width: 100%;
+    height: 100%;
+    z-index: -1;
+}
+
+/* 音乐播放器样式 */
+#music-player {
+    position: fixed;
+    top: 30px;
+    right: 30px;
+    width: 280px;
+    background: rgba(40, 40, 40, 0.95);
+    border: 1px solid rgba(255, 106, 0, 0.3);
+    border-radius: 15px;
+    padding: 15px;
+    box-shadow: 0 2px 10px rgba(0, 0, 0, 0.1);
+    cursor: move;
+    z-index: 1000;
+}
+
+/* 侧边导航栏样式 */
+.left-nav {
+    position: fixed;
+    left: 30px;
+    top: 240px;
+    width: 180px;
+    background: rgba(30, 30, 30, 0.9);
+    padding: 45px;
+    border-radius: 40px;
+}
+
+.right-nav {
+    position: fixed;
+    right: 30px;
+    top: 240px;
+    width: 180px;
+    background: rgba(30, 30, 30, 0.9);
+    padding: 45px;
+    border-radius: 40px;
+}
+
+/* 导航链接样式 */
+.nav-link {
+    display: block;
+    padding: 8px;
+    margin: 5px 0;
+    color: #ff8c00;
+    text-decoration: none;
+    border-radius: 5px;
+    transition: all 0.3s;
+    background: rgba(255, 140, 0, 0.05);
+}
+
+    .nav-link:hover {
+        color: #ffd700;
+        background: rgba(255, 140, 0, 0.15);
+    }
+
+/* 音乐控件样式 */
+.music-controls {
+    bottom: 20px;
+    
+    display: flex;
+    align-items: center;
+    gap: 10px;
+    margin-top: 10px;
+    background: rgba(125, 15, 56, 0);
+}
+
+.music-btn {
+    padding: 6px 12px;
+    background: rgba(75, 15, 56, 0.4);
+    color: white;
+    border: none;
+    border-radius: 5px;
+    cursor: pointer;
+    transition: all 0.2s ease;
+}
+
+    .music-btn:hover {
+        background: rgb(255, 0, 220);
+    }
+
+#settings-panel {
+    position: fixed;
+    left: 20px;
+    bottom: 20px;
+    background: rgba(30, 30, 30, 0.4);
+    padding: 15px;
+    border-radius: 8px;
+    width: 200px;
+    z-index: 1000;
+}
+
+    #settings-panel h4 {
+        margin: 0 0 10px 0;
+        color: #ff6a00;
+    }
+
+    #settings-panel label {
+        display: block;
+        margin: 8px 0 4px;
+        color: #fff;
+        font-size: 0.9rem;
+    }
+
+    #settings-panel input[type="color"],
+    #settings-panel select {
+        width: 100%;
+        padding: 6px;
+        border: 1px solid rgba(255, 255, 255, 0.2);
+        border-radius: 4px;
+        background: rgba(76, 255, 0, 0.4);
+        color: #fff;
+    }

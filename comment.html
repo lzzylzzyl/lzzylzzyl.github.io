@@ -1,0 +1,200 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+<head>
+    <meta charset="UTF-8" />
+    <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+    <title>评论功能网页</title>
+    <style>
+        body {
+            font-family: Arial, sans-serif;
+            background-color: #f4f4f4;
+            margin: 0;
+            padding: 20px;
+        }
+
+        .container {
+            max-width: 800px;
+            margin: 0 auto;
+            background: white;
+            padding: 20px;
+            border-radius: 8px;
+            box-shadow: 0 0 10px rgba(0, 0, 0, 0.1);
+        }
+
+        h1, h2 {
+            text-align: center;
+        }
+
+        form {
+            display: flex;
+            flex-direction: column;
+            gap: 10px;
+        }
+
+        label {
+            font-weight: bold;
+        }
+
+        input, textarea {
+            padding: 10px;
+            border: 1px solid #ccc;
+            border-radius: 5px;
+            font-size: 16px;
+        }
+
+        button {
+            padding: 10px;
+            background-color: #28a745;
+            color: white;
+            border: none;
+            border-radius: 5px;
+            cursor: pointer;
+            font-size: 16px;
+        }
+
+            button:hover {
+                background-color: #218838;
+            }
+
+        #commentsList {
+            list-style-type: none;
+            padding: 0;
+        }
+
+            #commentsList li {
+                background: #f9f9f9;
+                margin: 10px 0;
+                padding: 15px;
+                border: 1px solid #ddd;
+                border-radius: 5px;
+            }
+
+        .feedback {
+            padding: 10px;
+            margin: 10px 0;
+            border-radius: 5px;
+            display: none;
+        }
+
+        .success {
+            background: #d4edda;
+            color: #155724;
+        }
+
+        .error {
+            background: #f8d7da;
+            color: #721c24;
+        }
+
+        .loading {
+            background: #fff3cd;
+            color: #856404;
+        }
+    </style>
+</head>
+<body>
+    <div class="container">
+        <h1>评论功能网页</h1>
+        <form id="commentForm">
+            <label for="name">姓名:</label>
+            <input type="text" id="name" required>
+            <label for="comment">评论:</label>
+            <textarea id="comment" rows="4" required></textarea>
+            <button type="submit">提交评论</button>
+        </form>
+        <div class="feedback" id="feedback"></div>
+        <h2>评论列表</h2>
+        <ul id="commentsList"></ul>
+    </div>
+
+    <script>
+        // 显示反馈信息
+        function showFeedback(message, type = 'info', duration = 3000) {
+            const feedback = document.getElementById('feedback');
+            feedback.textContent = message;
+            feedback.className = `feedback ${type}`;
+            feedback.style.display = 'block';
+            if (duration > 0) {
+                setTimeout(() => feedback.style.display = 'none', duration);
+            }
+        }
+
+        // 加载评论
+        async function loadComments() {
+            try {
+                showFeedback('正在加载评论...', 'loading', 0);
+                const response = await fetch('http://localhost:8000/comments.xml');
+                const xmlText = await response.text();
+                const parser = new DOMParser();
+                const xmlDoc = parser.parseFromString(xmlText, 'text/xml');
+
+                const commentsList = document.getElementById('commentsList');
+                commentsList.innerHTML = '';
+
+                xmlDoc.querySelectorAll('comment').forEach(comment => {
+                    const name = comment.querySelector('name')?.textContent || '匿名用户';
+                    const text = comment.querySelector('text')?.textContent || '无内容';
+                    const timestamp = comment.querySelector('timestamp')?.textContent || '';
+
+                    const li = document.createElement('li');
+                    li.innerHTML = `
+                            <strong>${name}</strong>
+                            <p>${text}</p>
+                            <small>${new Date(timestamp).toLocaleString()}</small>
+                        `;
+                    commentsList.appendChild(li);
+                });
+            } catch (error) {
+                showFeedback(`加载失败: ${error.message}`, 'error', 5000);
+            }
+        }
+
+        // 提交评论
+        document.getElementById('commentForm').addEventListener('submit', async (e) => {
+            e.preventDefault();
+            const name = document.getElementById('name').value.trim();
+            const comment = document.getElementById('comment').value.trim();
+
+            // 输入验证
+            if (name.length < 2 || name.length > 50) {
+                showFeedback('姓名需为2-50字符', 'error');
+                return;
+            }
+            if (comment.length < 5 || comment.length > 500) {
+                showFeedback('评论需为5-500字符', 'error');
+                return;
+            }
+
+            try {
+                showFeedback('正在提交评论...', 'loading', 0);
+
+                // 构建 XML
+                const xmlData = `<?xml version="1.0" encoding="UTF-8"?>
+                                    <comment>
+                                        <name>${name}</name>
+                                        <text>${comment}</text>
+                                    </comment>`;
+
+                // 发送请求
+                const response = await fetch('http://localhost:8000/save_comment', {
+                    method: 'POST',
+                    headers: { 'Content-Type': 'application/xml' },
+                    body: xmlData
+                });
+
+                const result = await response.json();
+                if (!result.success) throw new Error(result.error);
+
+                showFeedback('提交成功', 'success');
+                document.getElementById('commentForm').reset();
+                await loadComments();
+            } catch (error) {
+                showFeedback(`提交失败: ${error.message}`, 'error', 5000);
+            }
+        });
+
+        // 初始化加载评论
+        loadComments();
+    </script>
+</body>
+</html>
