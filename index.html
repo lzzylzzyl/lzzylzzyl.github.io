@@ -5,48 +5,15 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title>Wiki 主页</title>
     <link rel="stylesheet" href="styles.css"> <!-- 引入外部 CSS 文件 -->
+    <script src="background-settings.js"></script>
+    <script src="x-side-navigator.js"></script>
+    <script src="music-player.js"></script>
 </head>
 <body>
     <!-- 设置面板 -->
-    <div id="settings-panel">
-        <h4>显示设置</h4>
-        <label for="bg-color">背景颜色：</label>
-        <input type="color" id="bg-color" value="#1a1a1a">
-
-        <label for="font-style">字体风格：</label>
-        <select id="font-style">
-            <option value="Segoe UI, sans-serif">默认</option>
-            <option value="Arial, sans-serif">Arial</option>
-            <option value="Georgia, serif">Georgia</option>
-            <option value="Courier New, monospace">Courier New</option>
-        </select>
-    </div>
-
-    <div id="playlist" style="display:none;">
-        <!-- 默认音乐 -->
-        <audio src="musics/1.mp3"></audio>
-        <!-- 播放列表 -->
-        <audio src="musics/2.mp3"></audio>
-        <audio src="musics/3.mp3"></audio>
-        <audio src="musics/4.mp3"></audio>
-    </div>
-    <!-- 音乐播放器 -->
-    <div id="music-player" draggable="true">
-        <h3>音乐播放器 ♫</h3>
-        <audio id="bg-music" loop>
-            <source src="default.mp3" type="audio/mpeg">
-        </audio>
-        <div class="music-controls">
-            <button class="music-btn" onclick="togglePlay()">播放/暂停</button>
-            <button class="music-btn" onclick="changeTrack()">切换音乐</button>
-        </div>
-        <div id="playlist" style="display:none;">
-            <audio src="music1.mp3"></audio>
-            <audio src="music2.mp3"></audio>
-            <audio src="music3.mp3"></audio>
-        </div>
-    </div>
-
+    <background-settings></background-settings>
+    <music-player></music-player>
+    <x-side-navigator></x-side-navigator>
     <!-- 左侧导航栏 -->
     <nav class="left-nav">
         <h3>分类导航</h3>
@@ -58,22 +25,7 @@
         <a href="#science" class="nav-link">科学探索</a>
     </nav>
 
-    <!-- 右侧导航栏 -->
-    <nav class="right-nav">
-        <h3>功能导航</h3>
-        <div class="search-box">
-            <input type="text" placeholder="搜索内容..." style="width: 100%; padding: 8px;">
-        </div>
-        <div class="hot-tags">
-            <h4>热门标签</h4>
-        </div>
-        <div class="recent-posts">
-            <h4>最新动态</h4>
-        </div>
-        <div class="external-links">
-            <h4>友情链接</h4>
-        </div>
-    </nav>
+
 
     <!-- 粒子效果容器 -->
     <div id="particles-js"></div>
