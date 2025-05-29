@@ -1,0 +1,30 @@
+
+
+
+看一个网页代码，首先看架构，从construct开始 。/render开始网页样式搭建
+
+connectedcallback是指这段javascript持续生效的时候不断检测和反复运行 此代码中每次都进行更新和检测
+
+updatelinks中const headings = document.querySelectorAll('h2, h3');找到文章所有h2h3标题并接着下一行枚举
+
+增加鼠标点击的监听并应用这个link
+
+    _setupMutationObserver() { 指返回这个节点首先必须是有效链接1，然后还得是h2或h3标题
+
+如果标题改了还要即使改回来 。observe就是添加该项极其系列子节点的实时监控
+
+   _setupResizeObserver() { 除了标题，还要有外框大小的变化
+
+    connectedCallback() {
+        this._updatePosition();
+        this._updateLinks();
+        this._setupMutationObserver();
+        this._setupResizeObserver();
+    }
+
+这个会在初始化 construct后接着执行一次构建，也就是说只运行一次，将所有的检测挨个添加到进程中
+
+    attributeChangedCallback(name, oldValue, newValue) {
+这个是如果标题改变，首先复用的updatepos要改，然后是实际的标签中的内容
+
+    disconnectedCallback() { 这个也是个网页已有的方法重写，如果未响应了就先不监听
